@@ -2,6 +2,9 @@
 namespace App\Geometry;
 
 class Circle implements ShapeInterface {
+    /**
+     * @var Point
+     */
     private $point;
     private $r;
 

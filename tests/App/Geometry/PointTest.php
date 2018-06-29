@@ -19,230 +19,357 @@ class PointTest extends TestCase
         $p2 = new Point(0, 0);
         $this->assertEquals(5, $p1->distance($p2));
     }
-    public function testIntersectLineWithLine1()
+
+    /**
+     * @dataProvider intersectLineWithLineProvider
+     */
+    public function testIntersectLineWithLine($p1, $p2, $p3, $p4, $expected)
     {
-        $p1 = new Point(1, 1);
-        $p2 = new Point(0, 0);
-        $p3 = new Point(3, 7);
-        $p4 = new Point(-1, 5);
         $a = new Line($p1, $p2);
         $b = new Line($p3, $p4);
         $res = new Intersect();
-        $this->assertEquals(true, $res->intersect($a, $b));
+        $this->assertEquals($expected, $res->intersect($a, $b));
     }
-    public function testIntersectLineWithLine2()
+
+    public function intersectLineWithLineProvider()
     {
-        $p1 = new Point(1, 1);
-        $p2 = new Point(0, 0);
-        $p3 = new Point(0, 1);
-        $p4 = new Point(1, 2);
-        $a = new Line($p1, $p2);
-        $b = new Line($p3, $p4);
-        $res = new Intersect();
-        $this->assertEquals(false, $res->intersect($a, $b));
+        return [
+            [
+                new Point(1, 1),
+                new Point(0, 0),
+                new Point(3, 7),
+                new Point(-1, 5),
+                true
+            ],
+            [
+                new Point(1, 1),
+                new Point(0, 0),
+                new Point(0, 1),
+                new Point(1, 2),
+                false
+            ]
+        ];
     }
-    public function testIntersectRectangleWithLine1()
+    /**
+     * @dataProvider intersectRectangleWithLineProvider
+     */
+
+    public function testIntersectRectangleWithLine($p1, $p2, $p3, $p4, $expected)
     {
-        $p1 = new Point(-5, -5);
-        $p2 = new Point(5, 5);
-        $p3 = new Point(3, 4);
-        $p4 = new Point(-1, 5);
         $a = new Rectangle($p1, $p2);
         $b = new Line($p3, $p4);
         $res = new Intersect();
-        $this->assertEquals(true, $res->intersect($a, $b));
+        $this->assertEquals($expected, $res->intersect($a, $b));
     }
-    public function testIntersectRectangleWithLine2()
+
+    public function intersectRectangleWithLineProvider()
     {
-        $p1 = new Point(-5, -5);
-        $p2 = new Point(5, 5);
-        $p3 = new Point(0, -6);
-        $p4 = new Point(1, -6);
-        $a = new Rectangle($p1, $p2);
-        $b = new Line($p3, $p4);
+        return [
+            [
+                new Point(-5, -5),
+                new Point(5, 5),
+                new Point(3, 4),
+                new Point(-1, 5),
+                true
+            ],
+            [
+                new Point(-5, -5),
+                new Point(5, 5),
+                new Point(0, -6),
+                new Point(1, -6),
+                false
+            ]
+        ];
+    }
+    /**
+     * @dataProvider intersectCircleWithLineProvider
+     */
+
+    public function testIntersectCircleWithLine1($p1, $p2, $p3, $r, $expected)
+    {
+        $a = new Circle($p1, $r);
+        $b = new Line($p2, $p3);
         $res = new Intersect();
-        $this->assertEquals(false, $res->intersect($a, $b));
+        $this->assertEquals($expected, $res->intersect($a, $b));
     }
-    public function testIntersectCircleWithLine1()
+
+    public function intersectCircleWithLineProvider()
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(1, 2);
-        $p3 = new Point(3, 4);
-        $a = new Circle($p1, 5);
-        $b = new Line($p3, $p2);
-        $res = new Intersect();
-        $this->assertEquals(true, $res->intersect($a, $b));
+        return [
+            [
+                new Point(0, 0),
+                new Point(1, 2),
+                new Point(3, 4),
+                5,
+                true
+            ],
+            [
+                new Point(0, 0),
+                new Point(0, -6),
+                new Point(1, -6),
+                5,
+                false
+            ]
+        ];
     }
-    public function testIntersectCircleWithLine2()
+    /**
+     * @dataProvider intersectRectangleWithRectangleProvider
+     */
+
+    public function testIntersectRectangleWithRectangle($p1, $p2, $p3, $p4, $expected)
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(0, -6);
-        $p3 = new Point(1, -6);
-        $a = new Circle($p1, 5);
-        $b = new Line($p3, $p2);
-        $res = new Intersect();
-        $this->assertEquals(false, $res->intersect($a, $b));
-    }
-    public function testIntersectRectangleWithRectangle1()
-    {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(2, 3);
-        $p3 = new Point(1, 2);
-        $p4 = new Point(5, 6);
         $a = new Rectangle($p1, $p2);
         $b = new Rectangle($p3, $p4);
         $res = new Intersect();
-        $this->assertEquals(true, $res->intersect($a, $b));
+        $this->assertEquals($expected, $res->intersect($a, $b));
     }
-    public function testIntersectRectangleWithRectangle2()
+
+    public function intersectRectangleWithRectangleProvider()
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(2, 3);
-        $p3 = new Point(4, 5);
-        $p4 = new Point(5, 6);
-        $a = new Rectangle($p1, $p2);
-        $b = new Rectangle($p3, $p4);
-        $res = new Intersect();
-        $this->assertEquals(false, $res->intersect($a, $b));
+        return [
+            [
+                new Point(0, 0),
+                new Point(2, 3),
+                new Point(1, 2),
+                new Point(5, 6),
+                true
+            ],
+            [
+                new Point(0, 0),
+                new Point(2, 3),
+                new Point(4, 4),
+                new Point(5, 6),
+                false
+            ],
+            [
+                new Point(0, 0),
+                new Point(1, 1),
+                new Point(0, 2),
+                new Point(3, 3),
+                false
+            ]
+        ];
     }
-    public function testIntersectCircleWithRectangle1()
+    /**
+     * @dataProvider intersectCircleWithRectangleProvider
+     */
+
+    public function testIntersectCircleWithRectangle($p1, $p2, $p3, $r, $expected)
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(2, 3);
-        $p3 = new Point(-4, -2);
-        $a = new Circle($p1, 5);
+        $a = new Circle($p1, $r);
         $b = new Rectangle($p2, $p3);
         $res = new Intersect();
-        $this->assertEquals(true, $res->intersect($a, $b));
+        $this->assertEquals($expected, $res->intersect($a, $b));
     }
-    public function testIntersectCircleWithRectangle2()
+
+    public function intersectCircleWithRectangleProvider()
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 3);
-        $p3 = new Point(6, 4);
-        $a = new Circle($p1, 3);
-        $b = new Rectangle($p2, $p3);
+        return [
+            [
+                new Point(0, 0),
+                new Point(2, 3),
+                new Point(-4, -2),
+                5,
+                true
+            ],
+            [
+                new Point(0, 0),
+                new Point(5, 3),
+                new Point(6, 4),
+                3,
+                false
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider intersectCircleWithCircleProvider
+     */
+    public function testIntersectCircleWithCircle($p1, $p2, $r1, $r2, $expected)
+    {
+        $a = new Circle($p1, $r1);
+        $b = new Circle($p2, $r2);
         $res = new Intersect();
-        $this->assertEquals(false, $res->intersect($a, $b));
+        $this->assertEquals($expected, $res->intersect($a, $b));
     }
-    public function testIntersectCircleWithCircle1()
+
+    public function intersectCircleWithCircleProvider()
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 3);
-        $a = new Circle($p1, 5);
-        $b = new Circle($p2, 4);
-        $res = new Intersect();
-        $this->assertEquals(true, $res->intersect($a, $b));
+        return [
+            [
+                new Point(0, 0),
+                new Point(5, 3),
+                5,
+                4,
+                true
+            ],
+            [
+                new Point(0, 0),
+                new Point(5, 3),
+                1,
+                2,
+                false
+            ]
+        ];
     }
-    public function testIntersectCircleWithCircle2()
+
+    /**
+     * @dataProvider containsRectangleWithRectangleProvider
+     */
+
+    public function testContainsRectangleWithRectangle($p1, $p2, $p3, $p4, $expected)
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 3);
-        $a = new Circle($p1, 1);
-        $b = new Circle($p2, 2);
-        $res = new Intersect();
-        $this->assertEquals(false, $res->intersect($a, $b));
-    }
-    public function testContainsRectangleWithRectangle1()
-    {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 3);
-        $p3 = new Point(1, 1);
-        $p4 = new Point(3, 2);
         $a = new Rectangle($p1, $p2);
         $b = new Rectangle($p3, $p4);
         $res = new Contains();
-        $this->assertEquals(true, $res->contains($a, $b));
+        $this->assertEquals($expected, $res->contains($a, $b));
     }
-    public function testContainsRectangleWithRectangle2()
+
+    public function containsRectangleWithRectangleProvider()
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 3);
-        $p3 = new Point(1, 1);
-        $p4 = new Point(6, 2);
-        $a = new Rectangle($p1, $p2);
-        $b = new Rectangle($p3, $p4);
-        $res = new Contains();
-        $this->assertEquals(false, $res->contains($a, $b));
+        return [
+            [
+                new Point(0, 0),
+                new Point(5, 3),
+                new Point(1, 1),
+                new Point(3, 2),
+                true
+            ],
+            [
+                new Point(0, 0),
+                new Point(5, 3),
+                new Point(1, 1),
+                new Point(6, 2),
+                false
+            ]
+        ];
     }
-    public function testContainsRectangleWithLine1()
+
+    /**
+     * @dataProvider containsRectangleWithLineProvider
+     */
+
+    public function testContainsRectangleWithLine($p1, $p2, $p3, $p4, $expected)
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 3);
-        $p3 = new Point(1, 1);
-        $p4 = new Point(3, 2);
         $a = new Rectangle($p1, $p2);
         $b = new Line($p3, $p4);
         $res = new Contains();
-        $this->assertEquals(true, $res->contains($a, $b));
+        $this->assertEquals($expected, $res->contains($a, $b));
     }
-    public function testContainsRectangleWithLine2()
+
+    public function containsRectangleWithLineProvider()
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 3);
-        $p3 = new Point(1, -1);
-        $p4 = new Point(3, -1);
+        return [
+            [
+                new Point(0, 0),
+                new Point(5, 3),
+                new Point(1, 1),
+                new Point(3, 2),
+                true
+            ],
+            [
+                new Point(0, 0),
+                new Point(5, 3),
+                new Point(1, -1),
+                new Point(3, -1),
+                false
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider containsRectangleWithCircleProvider
+     */
+
+    public function testContainsRectangleWithCircle($p1, $p2, $p3, $r, $expected)
+    {
         $a = new Rectangle($p1, $p2);
-        $b = new Line($p3, $p4);
+        $b = new Circle($p3, $r);
         $res = new Contains();
-        $this->assertEquals(false, $res->contains($a, $b));
+        $this->assertEquals($expected, $res->contains($a, $b));
     }
-    public function testContainsRectangleWithCircle1()
+
+    public function containsRectangleWithCircleProvider()
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 4);
-        $p3 = new Point(1, 2);
-        $a = new Rectangle($p1, $p2);
-        $b = new Circle($p3, 1);
-        $res = new Contains();
-        $this->assertEquals(true, $res->contains($a, $b));
+        return [
+            [
+                new Point(0, 0),
+                new Point(5, 4),
+                new Point(1, 2),
+                1,
+                true
+            ],
+            [
+                new Point(0, 0),
+                new Point(5, 4),
+                new Point(0, 2),
+                4,
+                false
+            ]
+        ];
     }
-    public function testContainsRectangleWithCircle2()
+
+    /**
+     * @dataProvider containsCircleWithLineProvider
+     */
+
+    public function testContainsCircleWithLine($p1, $p2, $p3, $r, $expected)
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 4);
-        $p3 = new Point(0, 2);
-        $a = new Rectangle($p1, $p2);
-        $b = new Circle($p3, 4);
-        $res = new Contains();
-        $this->assertEquals(false, $res->contains($a, $b));
-    }
-    public function testContainsCircleWithLine1()
-    {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(5, 3);
-        $p3 = new Point(1, 1);
-        $a = new Circle($p1, 5);
+        $a = new Circle($p1, $r);
         $b = new Line($p2, $p3);
         $res = new Contains();
-        $this->assertEquals(true, $res->contains($a, $b));
+        $this->assertEquals($expected, $res->contains($a, $b));
     }
-    public function testContainsCircleWithLine2()
+
+    public function containsCircleWithLineProvider()
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(2, -5);
-        $p3 = new Point(1, -5);
-        $a = new Circle($p1, 4);
-        $b = new Line($p2, $p3);
-        $res = new Contains();
-        $this->assertEquals(false, $res->contains($a, $b));
+        return [
+            [
+                new Point(0, 0),
+                new Point(5, 3),
+                new Point(1, 1),
+                5,
+                true
+            ],
+            [
+                new Point(0, 0),
+                new Point(2, -5),
+                new Point(1, -5),
+                4,
+                false
+            ]
+        ];
     }
-    public function testContainsCicrleWithCircle1()
+
+    /**
+     * @dataProvider containsCircleWithCircleProvider
+     */
+
+    public function testContainsCircleWithCircle($p1, $p2, $r1, $r2, $expected)
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(1, 1);
-        $a = new Circle($p1, 5);
-        $b = new Circle($p2, 2);
+        $a = new Circle($p1, $r1);
+        $b = new Circle($p2, $r2);
         $res = new Contains();
-        $this->assertEquals(true, $res->contains($a, $b));
+        $this->assertEquals($expected, $res->contains($a, $b));
     }
-    public function testContainsCicrleWithCircle2()
+
+    public function containsCircleWithCircleProvider()
     {
-        $p1 = new Point(0, 0);
-        $p2 = new Point(1, 1);
-        $a = new Circle($p1, 3);
-        $b = new Circle($p2, 2);
-        $res = new Contains();
-        $this->assertEquals(false, $res->contains($a, $b));
+        return [
+            [
+                new Point(0, 0),
+                new Point(1, 1),
+                5,
+                2,
+                true
+            ],
+            [
+                new Point(1, 0),
+                new Point(1, -5),
+                1,
+                2,
+                false
+            ]
+        ];
     }
 }

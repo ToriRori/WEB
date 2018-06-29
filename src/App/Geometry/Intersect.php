@@ -146,7 +146,7 @@ class Intersect
     }
     public function intersectCircleWithCircle(Circle $c1, Circle $c2)
     {
-        if ($c1->getCenter()->distance($c2->getCenter()) <= $c1->getRadius() + $c2->getRadius())
+        if ($c1->getCenter()->distance($c2->getCenter()) < $c1->getRadius() + $c2->getRadius())
             return true;
         return false;
     }

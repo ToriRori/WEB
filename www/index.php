@@ -1,12 +1,36 @@
-<?php
-namespace App\Geometry;
-require_once './init.php';
+<?php include __DIR__ . '/config.php'; require_once './init.php'; ?>
 
-$p1 = new Point(0, 0);
-$p2 = new Point(2, 3);
-$p3 = new Point(4, 5);
-$p4 = new Point(5, 6);
-$a = new Rectangle($p1, $p2);
-$b = new Rectangle($p3, $p4);
-$res = new Intersect();
-var_dump($res->intersect($a, $b));
+<?php $URL = $_SERVER["REQUEST_URI"];
+$URL = explode("?", $URL, 2)[0];?>
+
+<html>
+<body>
+
+<?php if ($URL == '/php-app-master/www/index.php')
+{
+    /*if ("Vica" == $_GET["name"])
+    {
+        echo "Hello, my Dear friend";
+    }
+    else{
+        echo "Go away!!!";
+    }*/
+}
+else
+{
+    echo "ERROR 404";
+}
+?>
+
+<form action="login.php" method="post">
+    <p>Login: <input type="text" name="login" /></p>
+    <p>Password: <input type="password" name="password" /></p>
+    <?php if(!empty($message)) { ?>
+        <p><?php echo $message; ?></p>
+    <?php } ?>
+    <p><input type="submit" name = "login_btn" value="Login" /></p>
+    <p><input type="submit" name = "signup_btn" value="Sign Up"></p>
+</form>
+
+</body>
+</html>

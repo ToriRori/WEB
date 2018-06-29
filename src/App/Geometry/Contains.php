@@ -81,9 +81,7 @@ class Contains
     }
     public function containsCircleWithCircle(Circle $a, Circle $b)
     {
-        if ($a->getCenter()->distance($b->getCenter()) + $b->getRadius() <= $a->getRadius())
-            return true;
-        if ($a->getCenter()->distance($b->getCenter()) + $a->getRadius() <= $b->getRadius())
+        if ($a->getCenter()->distance($b->getCenter()) <= $a->getRadius() + $b->getRadius())
             return true;
         return false;
     }
